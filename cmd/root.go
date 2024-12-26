@@ -5,9 +5,9 @@ import (
 )
 
 func StartEncoding(fileName string) {
-	fmt.Printf("Encoding has started on %v", fileName)
+	fmt.Printf("Encoding has started on %v\n", fileName)
 }
 
 func StartDecoding(fileName string) {
-	fmt.Printf("Decoding has started on %v", fileName)
+	fmt.Printf("Decoding has started on %v\n", fileName)
 }
