@@ -8,10 +8,10 @@ import (
 
 func StartEncoding(fileName string) {
 	fmt.Printf("Encoding has started on %v\n", fileName)
-	internal.EncodeFile()
+	internal.EncodeFile(fileName)
 }
 
 func StartDecoding(fileName string) {
 	fmt.Printf("Decoding has started on %v\n", fileName)
-	internal.DecodeFile()
+	internal.DecodeFile(fileName)
 }
