@@ -4,10 +4,10 @@ import (
 	"fmt"
 )
 
-func StartEncoding() {
-	fmt.Println("Encoding has started")
+func StartEncoding(fileName string) {
+	fmt.Printf("Encoding has started on %v", fileName)
 }
 
-func StartDecoding() {
-	fmt.Println("Decoding has started")
+func StartDecoding(fileName string) {
+	fmt.Printf("Decoding has started on %v", fileName)
 }
