@@ -9,7 +9,7 @@ import (
 	"github.com/zelshahawy/go-lzw/internal/dictionary"
 )
 
-func execEncoding(fileName string) error {
+func ExecEncoding(fileName string) error {
 	fmt.Println("Encoding has started")
 	dict, lookup := dictionary.InitDictionary()
 	nextCode := 256
