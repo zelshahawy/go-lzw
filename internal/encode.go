@@ -9,8 +9,16 @@ import (
 	"github.com/zelshahawy/go-lzw/internal/dictionary"
 )
 
+func getEnv(envVar string) string {
+	if value, ok := os.LookupEnv(envVar); ok {
+		return value
+	} else {
+		return ""
+	}
+}
+
 func ExecEncoding(fileName string) error {
-	fmt.Println("Encoding has started")
+	fmt.Printf("Encoding has started\n##############################\n\n")
 	dict, lookup := dictionary.InitDictionary()
 	nextCode := 256
 
@@ -79,13 +87,20 @@ func ExecEncoding(fileName string) error {
 	// Flush leftover bits
 	bp.FlushRemaining()
 
-	// Write the packed bytes to outFile
-	outF, err := os.Create(outFile)
-	if err != nil {
-		return err
-	}
-	defer outF.Close()
+	// Write the packed bytes to outFile or stdout
+	if getEnv("CLI") == "1" {
+		_, err = os.Stdout.Write(bp.Bytes())
+	} else {
+		outF, err := os.Create(outFile)
+		if err != nil {
+			return err
+		}
+		defer outF.Close()
 
-	_, err = outF.Write(bp.Bytes())
+		_, err = outF.Write(bp.Bytes())
+		if err != nil {
+			return err
+		}
+	}
 	return err
 }

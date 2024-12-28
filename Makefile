@@ -21,5 +21,5 @@ links:
 
 # Clean up binaries and symlinks
 clean:
-	rm -f $(BINARY_NAME) encode decode
+	rm -f $(BINARY_NAME) encode decode *.lzw
 
