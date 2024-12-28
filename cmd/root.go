@@ -2,20 +2,19 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/zelshahawy/go-lzw/internal"
 )
 
-func StartEncoding(fileName string) {
-	fmt.Printf("Encoding has started on %v\n", fileName)
-	if err := internal.ExecEncoding(fileName); err != nil {
+func StartEncoding(input io.Reader) {
+	if err := internal.ExecEncoding(input); err != nil {
 		fmt.Println("Error Encoding")
 	}
 }
 
-func StartDecoding(fileName string) {
-	fmt.Printf("Decoding has started on %v\n", fileName)
-	if err := internal.ExecDecoding(fileName); err != nil {
+func StartDecoding(input io.Reader) {
+	if err := internal.ExecDecoding(input); err != nil {
 		fmt.Println("Error Decoding")
 	}
 }

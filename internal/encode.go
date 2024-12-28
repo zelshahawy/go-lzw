@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -17,18 +16,12 @@ func getEnv(envVar string) string {
 	}
 }
 
-func ExecEncoding(fileName string) error {
-	fmt.Printf("Encoding has started\n##############################\n\n")
+func ExecEncoding(input io.Reader) error {
+	// log.Printf("Encoding has started\n##############################\n\n")
 	dict, lookup := dictionary.InitDictionary()
 	nextCode := 256
 
-	outFile := fileName + ".lzw"
-	file, err := os.Open(fileName)
-	if err != nil {
-		fmt.Println("Error Opening File")
-		return err
-	}
-	defer file.Close()
+	outFile := "output.lzw"
 
 	bp := bitio.NewBitPacker()
 	codeSize := 9
@@ -38,7 +31,7 @@ func ExecEncoding(fileName string) error {
 
 	buf := make([]byte, 4096)
 	for {
-		n, err := file.Read(buf)
+		n, err := input.Read(buf)
 		if err != nil && err != io.EOF {
 			return err
 		}
@@ -88,6 +81,7 @@ func ExecEncoding(fileName string) error {
 	bp.FlushRemaining()
 
 	// Write the packed bytes to outFile or stdout
+	var err error
 	if getEnv("CLI") == "1" {
 		_, err = os.Stdout.Write(bp.Bytes())
 	} else {

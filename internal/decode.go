@@ -3,22 +3,15 @@ package internal
 import (
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/zelshahawy/go-lzw/internal/bitio"
 	"github.com/zelshahawy/go-lzw/internal/dictionary"
 )
 
-func ExecDecoding(fileName string) error {
+func ExecDecoding(input io.Reader) error {
 	fmt.Println("Decoding has started")
 	dict, lookup := dictionary.InitDictionary()
 	nextCode := 256
-	file, err := os.Open(fileName)
-	if err != nil {
-		fmt.Println("Error Opening File")
-		return err
-	}
-	defer file.Close()
 
 	bp := bitio.NewBitPacker()
 	codeSize := 9
@@ -28,7 +21,7 @@ func ExecDecoding(fileName string) error {
 
 	buf := make([]byte, 4096)
 	for {
-		n, err := file.Read(buf)
+		n, err := input.Read(buf)
 		if err != nil && err != io.EOF {
 			return err
 		}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -9,23 +10,32 @@ import (
 )
 
 func main() {
-	fmt.Println("Entry Point called")
+	// log.Print("Entrty Point called")
 	cmdName := filepath.Base(os.Args[0])
 
+	var filename string
+	var input io.Reader
+
 	if len(os.Args) < 2 {
-		fmt.Println("Usage:")
-		fmt.Println("  encode <filename>")
-		fmt.Println("  decode <filename>")
-		os.Exit(1)
+		// log.Print("No filename provided, reading from stdin")
+		input = os.Stdin
+	} else {
+		filename = os.Args[1]
+		file, err := os.Open(filename)
+		if err != nil {
+			fmt.Println("Error Opening File")
+			os.Exit(1)
+		}
+		defer file.Close()
+		input = file
 	}
-	filename := os.Args[1]
 
 	switch cmdName {
 	case "encode":
-		cmd.StartEncoding(filename)
+		cmd.StartEncoding(input)
 
 	case "decode":
-		cmd.StartDecoding(filename)
+		cmd.StartDecoding(input)
 
 	default:
 		fmt.Println("Wrong Command Name Given")
