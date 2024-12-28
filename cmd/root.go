@@ -8,14 +8,14 @@ import (
 
 func StartEncoding(fileName string) {
 	fmt.Printf("Encoding has started on %v\n", fileName)
-	if internal.ExecEncoding(fileName) != nil {
+	if err := internal.ExecEncoding(fileName); err != nil {
 		fmt.Println("Error Encoding")
 	}
 }
 
 func StartDecoding(fileName string) {
 	fmt.Printf("Decoding has started on %v\n", fileName)
-	if internal.ExecDecoding(fileName) != nil {
+	if err := internal.ExecDecoding(fileName); err != nil {
 		fmt.Println("Error Decoding")
 	}
 }
