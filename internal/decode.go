@@ -2,7 +2,6 @@ package internal
 
 import (
 	"io"
-	"os"
 
 	"github.com/zelshahawy/go-lzw/internal/bitio"
 	"github.com/zelshahawy/go-lzw/internal/dictionary"
@@ -141,17 +140,6 @@ func ExecDecoding(input io.Reader) error {
 	// 6) Now bp.Output contains all uncompressed data in memory.
 	//    We'll do one final write to either stdout (if CLI=1) or output.out.
 
-	if getEnv("CLI") == "1" {
-		_, err := os.Stdout.Write(bp.Output)
-		return err
-	} else {
-		outF, err := os.Create("output.out")
-		if err != nil {
-			return err
-		}
-		defer outF.Close()
-
-		_, err = outF.Write(bp.Output)
-		return err
-	}
+	bp.WriteOutputToFile()
+	return nil
 }

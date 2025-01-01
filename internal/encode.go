@@ -2,26 +2,15 @@ package internal
 
 import (
 	"io"
-	"os"
 
 	"github.com/zelshahawy/go-lzw/internal/bitio"
 	"github.com/zelshahawy/go-lzw/internal/dictionary"
 )
 
-func getEnv(envVar string) string {
-	if value, ok := os.LookupEnv(envVar); ok {
-		return value
-	} else {
-		return ""
-	}
-}
-
 func ExecEncoding(input io.Reader) error {
 	// log.Printf("Encoding has started\n##############################\n\n")
 	dict, lookup := dictionary.InitDictionary()
 	nextCode := 256
-
-	outFile := "output.lzw"
 
 	bp := bitio.NewBitPacker()
 	codeSize := 9
@@ -86,22 +75,6 @@ func ExecEncoding(input io.Reader) error {
 	bp.FlushRemaining()
 
 	// Write the packed bytes to outFile or stdout
-	if getEnv("CLI") == "1" {
-		_, err := os.Stdout.Write(bp.Bytes())
-		if err != nil {
-			return err
-		}
-	} else {
-		outF, err := os.Create(outFile)
-		if err != nil {
-			return err
-		}
-		defer outF.Close()
-
-		_, err = outF.Write(bp.Bytes())
-		if err != nil {
-			return err
-		}
-	}
+	bp.WriteOutputToFile()
 	return nil
 }

@@ -1,5 +1,7 @@
 package bitio
 
+import "os"
+
 func (bp *BitPacker) WriteCode(code int, codeSize int) {
 	// Ensure the code is padded to the left to match the codeSize
 	code &= (1 << codeSize) - 1
@@ -26,4 +28,33 @@ func (bp *BitPacker) FlushRemaining() {
 		bp.BitBuf = 0
 		bp.BitCount = 0
 	}
+}
+
+func (bp *BitPacker) WriteOutputToFile() error {
+	outFile := "output.lzw"
+	if getEnv("CLI") == "1" {
+		_, err := os.Stdout.Write(bp.Bytes())
+		if err != nil {
+			return err
+		}
+	} else {
+		outF, err := os.Create(outFile)
+		if err != nil {
+			return err
+		}
+		defer outF.Close()
+
+		_, err = outF.Write(bp.Bytes())
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func getEnv(key string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return ""
 }
