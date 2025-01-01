@@ -50,39 +50,39 @@ func ExecDecoding(input io.Reader) error {
 	//    uncompressed bytes. We keep it inside ExecDecoding so it can
 	//    capture dict, nextCode, oldCode, oldString, and codeSize by reference.
 	decodeOneCode := func(newCode int) []byte {
-		// If this is the very first code in the stream:
 		if oldCode == -1 {
 			oldCode = newCode
 			oldString = reconstructString(dict, newCode)
 			return oldString
 		}
 
-		// Normal LZW decode flow, including the “K-W” edge case:
 		var newString []byte
 		if newCode >= len(dict) && newCode == nextCode {
-			// K-W: newString = oldString + firstByte(oldString)
+			// K-W edge case
 			firstByte := oldString[0]
 			newString = append(oldString, firstByte)
 		} else {
-			// Else reconstruct from the dictionary
 			newString = reconstructString(dict, newCode)
 		}
 
-		// Add a new entry to the dictionary: oldString + first byte of newString
+		// 1) Add dictionary entry
 		dict = append(dict, dictionary.DictionaryEntry{
 			Prefix: oldCode,
 			Ch:     newString[0],
 		})
+
+		// 2) Increment nextCode
 		nextCode++
 
-		// Possibly increase codeSize if we've used all codes at this size
-		if nextCode == (1<<codeSize) && codeSize < 15 {
+		// 3) Possibly update codeSize
+		if nextCode+1 == (1<<codeSize) && codeSize < 15 {
 			codeSize++
 		}
 
-		// Update oldCode / oldString
+		// 4) Update oldCode / oldString
 		oldCode = newCode
 		oldString = newString
+
 		return newString
 	}
 
@@ -105,15 +105,12 @@ func ExecDecoding(input io.Reader) error {
 						break
 					}
 					code := bp.ReadCode(codeSize)
+					// log.Printf("DEC: got code=%d, codeSize=%d, nextCode=%d", code, codeSize, nextCode)
 
 					if code == -1 {
 						// log.Printf("code == -1\n")
 						break
 					}
-					// Optionally store the code in bp.CodesOutput
-					bp.CodesOutput = append(bp.CodesOutput, code)
-
-					// Decode the code => uncompressed bytes
 					decodedBytes := decodeOneCode(code)
 
 					// Accumulate decoded bytes in bp.Output
@@ -135,8 +132,6 @@ func ExecDecoding(input io.Reader) error {
 		if code == -1 {
 			break
 		}
-		bp.CodesOutput = append(bp.CodesOutput, code)
-
 		decodedBytes := decodeOneCode(code)
 		bp.Output = append(bp.Output, decodedBytes...)
 	}

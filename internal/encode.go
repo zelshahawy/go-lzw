@@ -50,6 +50,8 @@ func ExecEncoding(input io.Reader) error {
 				if p != -1 {
 					// Write p using current codeSize
 					bp.WriteCode(p, codeSize)
+					// log.Printf("ENC: code=%d, codeSize=%d, nextCode=%d, p=%d, c=%d", p, codeSize, nextCode, p, c)
+
 				}
 
 				// Add new entry to dictionary
