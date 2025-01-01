@@ -25,6 +25,8 @@ func ExecEncoding(input io.Reader) error {
 
 	bp := bitio.NewBitPacker()
 	codeSize := 9
+	const MAXBITS int = 15
+	const MAXCODE int = 1<<MAXBITS - 1
 
 	// p = current prefix code
 	p := -1
@@ -59,9 +61,10 @@ func ExecEncoding(input io.Reader) error {
 				lookup[pc] = nextCode
 				nextCode++
 
-				// Possibly increase codeSize if we hit the limit
-				if nextCode == (1<<codeSize) && codeSize < 15 {
-					codeSize++
+				if nextCode < MAXCODE {
+					if nextCode == (1<<codeSize) && codeSize < MAXBITS {
+						codeSize++
+					}
 				}
 
 				// Reset p to the code for the single char c

@@ -41,6 +41,8 @@ func ExecDecoding(input io.Reader) error {
 	dict, _ := dictionary.InitDictionary()
 	nextCode := 256
 	codeSize := 9
+	const MAXBITS int = 15
+	const MAXCODE int = 1<<MAXBITS - 1
 
 	// We'll track the "oldCode" and "oldString" as we decode each code.
 	oldCode := -1
@@ -74,9 +76,10 @@ func ExecDecoding(input io.Reader) error {
 		// 2) Increment nextCode
 		nextCode++
 
-		// 3) Possibly update codeSize
-		if nextCode+1 == (1<<codeSize) && codeSize < 15 {
-			codeSize++
+		if nextCode < MAXCODE {
+			if nextCode+1 == (1<<codeSize) && codeSize < MAXBITS {
+				codeSize++
+			}
 		}
 
 		// 4) Update oldCode / oldString
