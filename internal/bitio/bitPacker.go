@@ -1,21 +1,23 @@
 package bitio
 
 type BitPacker struct {
-	output   []byte // where we store packed bytes
-	bitBuf   uint64 // buffer for bits not yet written
-	bitCount int    // how many bits are currently in bitBuf
+	Output      []byte // where we store packed bytes
+	CodesOutput []int  // where we store packed codes
+	BitBuf      uint64 // buffer for bits not yet written
+	BitCount    int    // how many bits are currently in bitBuf
 }
 
 // NewBitPacker creates an empty BitPacker.
 func NewBitPacker() *BitPacker {
 	return &BitPacker{
-		output:   make([]byte, 0),
-		bitBuf:   0,
-		bitCount: 0,
+		Output:      make([]byte, 0),
+		CodesOutput: make([]int, 0),
+		BitBuf:      0,
+		BitCount:    0,
 	}
 }
 
 // Bytes returns the packed data as a byte slice.
 func (bp *BitPacker) Bytes() []byte {
-	return bp.output
+	return bp.Output
 }

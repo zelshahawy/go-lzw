@@ -81,9 +81,11 @@ func ExecEncoding(input io.Reader) error {
 	bp.FlushRemaining()
 
 	// Write the packed bytes to outFile or stdout
-	var err error
 	if getEnv("CLI") == "1" {
-		_, err = os.Stdout.Write(bp.Bytes())
+		_, err := os.Stdout.Write(bp.Bytes())
+		if err != nil {
+			return err
+		}
 	} else {
 		outF, err := os.Create(outFile)
 		if err != nil {
@@ -96,5 +98,5 @@ func ExecEncoding(input io.Reader) error {
 			return err
 		}
 	}
-	return err
+	return nil
 }
