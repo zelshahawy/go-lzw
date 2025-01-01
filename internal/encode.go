@@ -25,7 +25,7 @@ func ExecEncoding(input io.Reader) error {
 
 	bp := bitio.NewBitPacker()
 	codeSize := 9
-	const MAXBITS int = 15
+	const MAXBITS int = 20
 	const MAXCODE int = 1<<MAXBITS - 1
 
 	// p = current prefix code
@@ -57,11 +57,11 @@ func ExecEncoding(input io.Reader) error {
 				}
 
 				// Add new entry to dictionary
-				dict = append(dict, dictionary.DictionaryEntry{Prefix: p, Ch: c})
-				lookup[pc] = nextCode
-				nextCode++
 
 				if nextCode < MAXCODE {
+					dict = append(dict, dictionary.DictionaryEntry{Prefix: p, Ch: c})
+					lookup[pc] = nextCode
+					nextCode++
 					if nextCode == (1<<codeSize) && codeSize < MAXBITS {
 						codeSize++
 					}
