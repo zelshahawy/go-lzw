@@ -18,6 +18,10 @@ Supports **dictionary growth** up to 15-bit codes (max code = 32767) and a “st
   - Mirrors the encoder’s logic (9-bit initial code size, grows to 15 bits).
   - Ignores any leftover bits that cannot form a valid code (to avoid out-of-range dictionary references).
 
+- **Threading and Parallelism**:
+  - Supports encoding / decoding multiple files at times using threads up to a maximum of 8.
+  - For example, you can call `./encode <filename[1]> <filename[2]> ... <filename[8]>`
+
 ## Requirements
 
 - **Go 1.18+** (or a reasonably recent Go version).
