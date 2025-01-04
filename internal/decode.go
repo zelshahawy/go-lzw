@@ -139,7 +139,7 @@ func ExecDecoding(input io.Reader) error {
 
 	// 6) Now bp.Output contains all uncompressed data in memory.
 	//    We'll do one final write to either stdout (if CLI=1) or output.out.
-
-	bp.WriteOutputToFile()
+	fileName := "output.out"
+	bp.WriteOutputToFile(fileName)
 	return nil
 }

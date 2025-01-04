@@ -75,6 +75,7 @@ func ExecEncoding(input io.Reader) error {
 	bp.FlushRemaining()
 
 	// Write the packed bytes to outFile or stdout
-	bp.WriteOutputToFile()
+	fileName := "encoded.lzw"
+	bp.WriteOutputToFile(fileName)
 	return nil
 }

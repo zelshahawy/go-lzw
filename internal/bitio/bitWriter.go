@@ -30,8 +30,7 @@ func (bp *BitPacker) FlushRemaining() {
 	}
 }
 
-func (bp *BitPacker) WriteOutputToFile() error {
-	outFile := "output.lzw"
+func (bp *BitPacker) WriteOutputToFile(outFile string) error {
 	if getEnv("CLI") == "1" {
 		_, err := os.Stdout.Write(bp.Bytes())
 		if err != nil {
