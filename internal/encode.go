@@ -7,7 +7,7 @@ import (
 	"github.com/zelshahawy/go-lzw/internal/dictionary"
 )
 
-func ExecEncoding(input io.Reader) error {
+func ExecEncoding(input io.Reader, filename string) error {
 	// log.Printf("Encoding has started\n##############################\n\n")
 	dict, lookup := dictionary.InitDictionary()
 	nextCode := 256
@@ -75,7 +75,7 @@ func ExecEncoding(input io.Reader) error {
 	bp.FlushRemaining()
 
 	// Write the packed bytes to outFile or stdout
-	fileName := "encoded.lzw"
+	fileName := (filename) + ".lzw"
 	bp.WriteOutputToFile(fileName)
 	return nil
 }

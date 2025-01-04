@@ -32,7 +32,7 @@ func reconstructString(dict []dictionary.DictionaryEntry, code int) []byte {
 // ExecDecoding reads all compressed data from 'input', decodes it via LZW,
 // accumulates the decoded data in memory, then writes it once at the end
 // to minimize I/O.
-func ExecDecoding(input io.Reader) error {
+func ExecDecoding(input io.Reader, filename string) error {
 	// 1) Prepare a BitPacker for decoding (it has Output, CodesOutput, BitBuf, BitCount).
 	bp := bitio.NewBitPacker()
 
@@ -139,7 +139,7 @@ func ExecDecoding(input io.Reader) error {
 
 	// 6) Now bp.Output contains all uncompressed data in memory.
 	//    We'll do one final write to either stdout (if CLI=1) or output.out.
-	fileName := "output.out"
+	fileName := filename + ".out"
 	bp.WriteOutputToFile(fileName)
 	return nil
 }
