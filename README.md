@@ -13,8 +13,8 @@ Supports **dictionary growth** up to 15-bit codes (max code = 32767) and a “st
   - Stops adding new dictionary entries once `nextCode` hits 32767, but continues encoding with existing entries.
 
 - **Decoding (decompression)**:
-  - Reads from a `.lzw` file or `stdin`.
-  - Produces a decompressed output file (e.g., `output.out`) or writes to `stdout`.
+  - Can reads from any file, should be a `.lzw` file, or `stdin`.
+  - Produces a decompressed output file (`output.out`) or writes to `stdout` based on `CLI` Env variable.
   - Mirrors the encoder’s logic (9-bit initial code size, grows to 15 bits).
   - Ignores any leftover bits that cannot form a valid code (to avoid out-of-range dictionary references).
 
@@ -45,7 +45,7 @@ To compress a file `input.txt`:
 ./encode input.txt
 ```
 
-- By default, this writes a compressed file named `output.lzw`.
+- By default, this writes a compressed file named `encoded.lzw`.
 - Alternatively, set the environment variable `CLI=1` to write compressed data to `stdout`:
 
   ```bash
