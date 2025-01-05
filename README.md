@@ -20,7 +20,8 @@ Supports **dictionary growth** up to 15-bit codes (max code = 32767) and a “st
 
 - **Threading and Parallelism**:
   - Supports encoding / decoding multiple files at times using threads up to a maximum of 8.
-  - For example, you can call `./encode <filename[1]> <filename[2]> ... <filename[8]>`
+  - For example, you can call `./encode <filename[1]> <filename[2]> ... <filename[8]>`.
+  - Has shown promising results when processing multiple, considerably big sized files.
 
 ## Requirements
 
