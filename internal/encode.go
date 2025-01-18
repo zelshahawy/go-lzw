@@ -10,7 +10,6 @@ import (
 // ExecEncoding reads all data from 'input', encodes it via LZW,
 // accumulates the encoded data in memory, then writes it once at the end to minimize I/O.
 // Accepts an io.Reader and a filename
-
 func ExecEncoding(input io.Reader, filename string) error {
 	// log.Printf("Encoding has started\n##############################\n\n")
 	dict, lookup := dictionary.InitDictionary()
