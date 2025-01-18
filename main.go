@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -10,63 +9,58 @@ import (
 	"github.com/zelshahawy/go-lzw/cmd"
 )
 
-// Starter function for the program
-// It reads the command name and the filenames from the command line arguments
-// It checks if the command name is either "encode" or "decode" and the number of filenames is valid
-// Then it opens the files and starts the encoding/decoding process
-// It uses a WaitGroup to synchronize the goroutines
-// It waits for all goroutines to finish before exiting
 func main() {
-	// log.Print("Entry Point called")
+	// Parse command name
 	cmdName := filepath.Base(os.Args[0])
 
-	if len(os.Args) < 2 {
-		fmt.Println("No filenames provided")
-		os.Exit(1)
-	}
-
 	if len(os.Args) > 9 {
-		fmt.Println("Too many filenames provided, maximum is 8")
+		fmt.Fprintln(os.Stderr, "Too many filenames provided, maximum is 8")
 		os.Exit(1)
 	}
 
-	var inputs []io.Reader
-	var fileNames []string
 	var wg sync.WaitGroup // WaitGroup for synchronization
+	if len(os.Args) < 2 {
+		// No filenames provided, read from stdin
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			switch cmdName {
+			case "encode":
+				cmd.StartEncoding(os.Stdin, "stdin")
+			case "decode":
+				cmd.StartDecoding(os.Stdin, "stdin")
+			default:
+				fmt.Fprintln(os.Stderr, "Invalid command name")
+				os.Exit(1)
+			}
+		}()
+	} else {
+		// Filenames provided
+		for i := 1; i < len(os.Args); i++ {
+			filename := os.Args[i]
+			wg.Add(1)
+			go func(filename string) {
+				defer wg.Done()
+				file, err := os.Open(filename)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error opening file: %s\n", filename)
+					return
+				}
+				defer file.Close()
 
-	for i := 1; i < len(os.Args); i++ {
-		filename := os.Args[i]
-		file, err := os.Open(filename)
-		if err != nil {
-			fmt.Println("Error Opening File:", filename)
-			os.Exit(1)
+				switch cmdName {
+				case "encode":
+					cmd.StartEncoding(file, filepath.Base(filename))
+				case "decode":
+					cmd.StartDecoding(file, filepath.Base(filename))
+				default:
+					fmt.Fprintln(os.Stderr, "Invalid command name")
+					os.Exit(1)
+				}
+			}(filename)
 		}
-		defer file.Close()
-		inputs = append(inputs, file)
-		fileNames = append(fileNames, filepath.Base(filename))
 	}
 
-	switch cmdName {
-	case "encode":
-		for i, input := range inputs {
-			wg.Add(1)
-			go func(input io.Reader, filename string) {
-				defer wg.Done()
-				cmd.StartEncoding(input, filename)
-			}(input, fileNames[i])
-		}
-
-	case "decode":
-		for i, input := range inputs {
-			wg.Add(1)
-			go func(input io.Reader, filename string) {
-				defer wg.Done()
-				cmd.StartDecoding(input, filename)
-			}(input, fileNames[i])
-		}
-
-	default:
-		fmt.Println("Wrong Command Name Given")
-	}
 	wg.Wait()
+	// fmt.Println("All goroutines have finished.")
 }

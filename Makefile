@@ -9,7 +9,7 @@ all: build links
 
 # Build the Go binary
 build:
-	go build -o $(BINARY_NAME) $(SOURCES)
+	 go build -o ${BINARY_NAME} -ldflags="-s -w" ${SOURCES}
 
 # Create symlinks
 links:
