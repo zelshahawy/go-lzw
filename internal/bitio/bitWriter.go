@@ -2,6 +2,8 @@ package bitio
 
 import "os"
 
+// a function that writes the code to the packed data.
+// accepts the code and the code size
 func (bp *BitPacker) WriteCode(code int, codeSize int) {
 	// Ensure the code is padded to the left to match the codeSize
 	code &= (1 << codeSize) - 1
@@ -30,6 +32,7 @@ func (bp *BitPacker) FlushRemaining() {
 	}
 }
 
+// WriteOutputToFile writes the packed data to the output file.
 func (bp *BitPacker) WriteOutputToFile(outFile string) error {
 	if getEnv("CLI") == "1" {
 		_, err := os.Stdout.Write(bp.Bytes())
@@ -51,6 +54,7 @@ func (bp *BitPacker) WriteOutputToFile(outFile string) error {
 	return nil
 }
 
+// getEnv is a helper function to get the value of an environment variable.
 func getEnv(key string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value

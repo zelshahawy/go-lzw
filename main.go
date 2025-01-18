@@ -10,6 +10,12 @@ import (
 	"github.com/zelshahawy/go-lzw/cmd"
 )
 
+// Starter function for the program
+// It reads the command name and the filenames from the command line arguments
+// It checks if the command name is either "encode" or "decode" and the number of filenames is valid
+// Then it opens the files and starts the encoding/decoding process
+// It uses a WaitGroup to synchronize the goroutines
+// It waits for all goroutines to finish before exiting
 func main() {
 	// log.Print("Entry Point called")
 	cmdName := filepath.Base(os.Args[0])

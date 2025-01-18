@@ -2,6 +2,7 @@ package bitio
 
 // BitPacker is a struct that holds the packed data.
 
+// A function that reads the code from the packed data.
 func (bp *BitPacker) ReadCode(codeSize int) int {
 	code := 0
 	for i := 0; i < codeSize; i++ {

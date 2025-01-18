@@ -10,6 +10,7 @@ import (
 // reconstructString traverses the chain (Prefix, Ch) until we reach -1 (meaning a
 // single-byte code). It collects the bytes in reverse, then reverses them to
 // produce the full string.
+// Accepts a slice of dictionary.DictionaryEntry and a code
 func reconstructString(dict []dictionary.DictionaryEntry, code int) []byte {
 	if code < 256 {
 		// Single-byte character
@@ -32,6 +33,7 @@ func reconstructString(dict []dictionary.DictionaryEntry, code int) []byte {
 // ExecDecoding reads all compressed data from 'input', decodes it via LZW,
 // accumulates the decoded data in memory, then writes it once at the end
 // to minimize I/O.
+// Accepts an io.Reader and a filename
 func ExecDecoding(input io.Reader, filename string) error {
 	// 1) Prepare a BitPacker for decoding (it has Output, CodesOutput, BitBuf, BitCount).
 	bp := bitio.NewBitPacker()
