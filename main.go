@@ -26,8 +26,10 @@ func main() {
 			defer wg.Done()
 			switch cmdName {
 			case "encode":
+				fmt.Print("Enter text to encode (Ctrl+D to finish): ")
 				cmd.StartEncoding(os.Stdin, "stdin") // Use EOF to signal end of input. Ctrl+D on Unix systems.
 			case "decode":
+				fmt.Print("Enter text to decode (Ctrl+D to finish): ")
 				cmd.StartDecoding(os.Stdin, "stdin")
 			default:
 				fmt.Fprintln(os.Stderr, "Invalid command name")
