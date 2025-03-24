@@ -26,7 +26,7 @@ func main() {
 			defer wg.Done()
 			switch cmdName {
 			case "encode":
-				cmd.StartEncoding(os.Stdin, "stdin")
+				cmd.StartEncoding(os.Stdin, "stdin") // Use EOF to signal end of input. Ctrl+D on Unix systems.
 			case "decode":
 				cmd.StartDecoding(os.Stdin, "stdin")
 			default:

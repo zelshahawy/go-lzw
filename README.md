@@ -50,6 +50,14 @@ To compress a file `input.txt`:
 ./encode input.txt
 ```
 
+You could also supply using the stdin by typing
+```bash
+./encode
+"YOUR TXT SHOULD BE HERE" CTRL D
+``` 
+
+As in most UNIX systems, CTRL D signals end of input.
+
 - By default, this writes a compressed file named `encoded.lzw`.
 - Alternatively, set the environment variable `CLI=1` to write compressed data to `stdout`:
 
